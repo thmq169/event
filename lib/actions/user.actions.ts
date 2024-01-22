@@ -1,23 +1,25 @@
 "use server";
 
-import { CreateUserParams, UpdateUserParams } from "@/types";
-import { handleError } from "../utils";
-import { connectToDatabase } from "../database";
-import User from "../database/models/user";
-import Event from "../database/models/event";
-import Order from "../database/models/order";
+import { revalidatePath } from "next/cache";
 
-export const createUser = async (user: CreateUserParams) => {
+import { connectToDatabase } from "@/lib/database";
+import User from "@/lib/database/models/user.model";
+import Order from "@/lib/database/models/order.model";
+import Event from "@/lib/database/models/event.model";
+import { handleError } from "@/lib/utils";
+
+import { CreateUserParams, UpdateUserParams } from "@/types";
+
+export async function createUser(user: CreateUserParams) {
   try {
     await connectToDatabase();
 
     const newUser = await User.create(user);
-
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
     handleError(error);
   }
-};
+}
 
 export async function getUserById(userId: string) {
   try {
@@ -75,7 +77,7 @@ export async function deleteUser(clerkId: string) {
 
     // Delete user
     const deletedUser = await User.findByIdAndDelete(userToDelete._id);
-    //   revalidatePath('/')
+    revalidatePath("/");
 
     return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
   } catch (error) {

@@ -1,7 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
-import { createUser, deleteUser, updateUser } from "@/lib/actions/user";
+import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
 import { clerkClient } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === "user.created") {
-    const { id, email_addresses, username, image_url, first_name, last_name } =
+    const { id, email_addresses, image_url, first_name, last_name, username } =
       evt.data;
 
     const user = {
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json({ message: "Success", user: newUser });
+    return NextResponse.json({ message: "OK", user: newUser });
   }
 
   if (eventType === "user.updated") {
