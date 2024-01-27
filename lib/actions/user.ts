@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 
 import { connectToDatabase } from "@/lib/database";
-import User from "@/lib/database/models/user.model";
-import Order from "@/lib/database/models/order.model";
-import Event from "@/lib/database/models/event.model";
+import User from "@/lib/database/models/user";
+import Order from "@/lib/database/models/order";
+import Event from "@/lib/database/models/event";
 import { handleError } from "@/lib/utils";
 
 import { CreateUserParams, UpdateUserParams } from "@/types";
